@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131c">
+  <meta name="description" content="Convert MP3 audio into dense, spectral MIDI note data in your browser.">
+  <title>MP3 to MIDI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="MP3 to MIDI home">
+        <span class="brand-mark">♫</span>
+        <span>MP3<span class="brand-dim">→</span>MIDI</span>
+      </a>
+      <span class="local-badge"><i></i> Runs locally in your browser</span>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">AUDIO TRANSCRIPTION LAB</p>
+      <h1>Turn sound into<br><span>notes.</span></h1>
+      <p class="intro">Drop in an MP3 and extract a dense stream of MIDI notes from its frequency spectrum. No upload, no server, just signal processing in your browser.</p>
+    </section>
+
+    <section class="workspace" aria-label="Audio conversion">
+      <label class="dropzone" id="dropzone" for="fileInput">
+        <input id="fileInput" type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/*">
+        <span class="upload-icon">↑</span>
+        <strong id="filePrompt">Drop an audio file here</strong>
+        <span class="muted">or <u>browse files</u> · MP3, WAV, and other browser-decodable audio</span>
+      </label>
+
+      <div class="file-row hidden" id="fileRow">
+        <div class="file-symbol">♫</div>
+        <div class="file-meta"><strong id="fileName">audio.mp3</strong><span id="fileDetails" class="muted"></span></div>
+        <button class="icon-button" id="removeFile" aria-label="Remove selected file">×</button>
+      </div>
+
+      <div class="controls">
+        <div class="control">
+          <label for="density">Note density</label>
+          <select id="density">
+            <option value="6">Balanced · 6 peaks per frame</option>
+            <option value="12" selected>Dense · 12 peaks per frame</option>
+            <option value="20">Very dense · 20 peaks per frame</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="resolution">Analysis resolution</label>
+          <select id="resolution">
+            <option value="4096">Faster · 4096 samples</option>
+            <option value="8192" selected>Detailed · 8192 samples</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="convert-button" id="convertButton" disabled>
+        <span>Convert to MIDI</span><span aria-hidden="true">↗</span>
+      </button>
+
+      <div class="progress-wrap hidden" id="progressWrap">
+        <div class="progress-label"><span id="statusText">Preparing audio…</span><span id="progressPercent">0%</span></div>
+        <div class="progress-track"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="result hidden" id="result">
+        <div class="result-icon">✓</div>
+        <div class="result-copy"><strong>MIDI is ready</strong><span id="resultDetails" class="muted"></span></div>
+        <button class="download-button" id="downloadButton">Download .mid ↓</button>
+      </div>
+      <p class="error hidden" id="errorMessage" role="alert"></p>
+    </section>
+
+    <section class="explain">
+      <div><span class="step">01</span><strong>Decode</strong><p>The browser decodes the audio into PCM samples.</p></div>
+      <div><span class="step">02</span><strong>Analyze</strong><p>Windowed FFT frames reveal strong frequency peaks over time.</p></div>
+      <div><span class="step">03</span><strong>Write MIDI</strong><p>Detected pitches become overlapping note events in a Standard MIDI file.</p></div>
+    </section>
+
+    <footer><span>MP3→MIDI</span><span>Experimental spectral transcription · GitHub Pages</span></footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
