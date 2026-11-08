@@ -100,8 +100,8 @@ function fft(real, imag) {
     for (;j&bit;bit>>=1) j^=bit;
     j^=bit;
     if (i<j) {
-      [real[i],real[j]]=[real[j],real[i]];
-      [imag[i],imag[j]]=[imag[j],imag[i]];
+      const tempReal=real[i]; real[i]=real[j]; real[j]=tempReal;
+      const tempImag=imag[i]; imag[i]=imag[j]; imag[j]=tempImag;
     }
   }
   for (let len=2;len<=n;len<<=1) {
@@ -215,7 +215,9 @@ function buildMidi(events) {
   track.push(0x00,0xff,0x51,0x03,(tempo>>16)&255,(tempo>>8)&255,tempo&255);
   let previous=0;
   for(const msg of messages) {
-    track.push(...vlq(msg.tick-previous),...msg.data);
+    const deltaBytes=vlq(msg.tick-previous);
+    for(let i=0;i<deltaBytes.length;i++) track.push(deltaBytes[i]);
+    track.push(msg.data[0],msg.data[1],msg.data[2]);
     previous=msg.tick;
   }
   track.push(0x00,0xff,0x2f,0x00);
