@@ -223,7 +223,10 @@ function buildMidi(events) {
   pushAscii(out,"MThd"); out.push(0,0,0,6,0,0,0,1,(ppq>>8)&255,ppq&255);
   pushAscii(out,"MTrk");
   const n=track.length;
-  out.push((n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255,...track);
+  out.push((n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255);
+  // Avoid spreading a potentially huge note track into one function call.
+  // Dense conversions can contain hundreds of thousands of MIDI bytes.
+  for (let i=0;i<track.length;i++) out.push(track[i]);
   return new Uint8Array(out);
 }
 function downloadMidi() {
