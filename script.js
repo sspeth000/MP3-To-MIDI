@@ -121,14 +121,14 @@ function fft(real, imag) {
 }
 
 async function analyze(samples, sampleRate, fftSize, maxPeaks) {
-  const hop = Math.max(256, Math.floor(fftSize/8));
+  const hop = Math.max(128, Math.floor(fftSize/16));
   const half = fftSize/2;
   const window = new Float32Array(fftSize);
   for (let i=0;i<fftSize;i++) window[i]=0.5*(1-Math.cos(2*Math.PI*i/(fftSize-1)));
   const real=new Float32Array(fftSize), imag=new Float32Array(fftSize);
   const active=new Map(), events=[];
   const totalFrames=Math.max(1,Math.ceil(Math.max(0,samples.length-fftSize)/hop)+1);
-  const minHz=55,maxHz=1760;
+  const minHz=40,maxHz=4000;
   for (let frame=0;frame<totalFrames;frame++) {
     const offset=frame*hop;
     let energy=0;
@@ -146,7 +146,7 @@ async function analyze(samples, sampleRate, fftSize, maxPeaks) {
         if(mag>maxMag) maxMag=mag;
       }
       const candidates=[];
-      const threshold=maxMag*0.075;
+      const threshold=maxMag*0.025;
       const lowBin=Math.max(2,Math.floor(minHz*fftSize/sampleRate));
       const highBin=Math.min(half-2,Math.ceil(maxHz*fftSize/sampleRate));
       for(let k=lowBin;k<=highBin;k++) {
@@ -172,7 +172,7 @@ async function analyze(samples, sampleRate, fftSize, maxPeaks) {
       }
     }
     for(const [note,state] of active) {
-      if(frame-state.last>2) {
+      if(frame-state.last>1) {
         const start=state.start*hop/sampleRate;
         const end=Math.max(start+hop/sampleRate,(state.last+1)*hop/sampleRate);
         events.push({note,start,end,velocity:state.velocity});
