@@ -42,16 +42,18 @@
         <div class="control">
           <label for="density">Note density</label>
           <select id="density">
-            <option value="6">Balanced · 6 peaks per frame</option>
-            <option value="12" selected>Dense · 12 peaks per frame</option>
-            <option value="20">Very dense · 20 peaks per frame</option>
+            <option value="12">Dense · 12 peaks per frame</option>
+            <option value="32">Very dense · 32 peaks per frame</option>
+            <option value="64" selected>Extreme · 64 peaks per frame</option>
+            <option value="96">Maximum · 96 peaks per frame</option>
           </select>
         </div>
         <div class="control">
           <label for="resolution">Analysis resolution</label>
           <select id="resolution">
-            <option value="4096">Faster · 4096 samples</option>
-            <option value="8192" selected>Detailed · 8192 samples</option>
+            <option value="2048">Fast changes · 2048 samples</option>
+            <option value="4096" selected>Balanced detail · 4096 samples</option>
+            <option value="8192">Fine frequency detail · 8192 samples</option>
           </select>
         </div>
       </div>
